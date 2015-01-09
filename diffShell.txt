@@ -1,0 +1,198 @@
+3,5c3,5
+< type 'gcc shellA.c -o shA' to compile
+< type './shA' to run program.
+< Test cases are in testA.txt file.
+---
+> type 'gcc shellB.c -o shB' to compile
+> type './shB' to run program.
+> Test cases are in testB.txt file.
+94c94
+<     int i,j,rr_flag; //bobo add
+---
+>     int i,j,k,rr_flag; //bobo add
+102c102,108
+<     int rr_num, rr_i;
+---
+>     int rr_num, his_num;
+>     FILE *hisfile;
+>     int his_background, his_count;
+>     int i_temp;
+> 
+>     //check if "history.dat" file exist. 
+>     //if yes, read it.
+104d109
+<     //printf("sizeof= %d", sizeof(his[0].args));
+111a117,120
+>     for(i=0; i<MAX_LINE/2+1; i++){
+>       runargs[i]=NULL;
+>     }
+>     run_bg=0;
+113,117c122,127
+< 
+<     while (1){            /* Program terminates normally inside setup */
+<       
+<       for(i=0; i<MAX_LINE/2+1; i++){
+< 	runargs[i]=NULL;
+---
+>     hisfile = fopen("history.dat","r");
+>     his_num=0;
+>     if (hisfile != NULL){
+>       if(fscanf(hisfile,"%d", &his_num) <=0 ) {
+> 	printf("wrong history.dat file");
+> 	exit(0);
+119d128
+<       run_bg=0;
+121,126c130,157
+<       background = 0;
+<       printf("SystemsIIShell->");
+<       fflush(0);
+<       setup(inputBuffer, args, &background);       /* get next command */
+<       if(args[0]==NULL) continue;
+<       // if it is 'rr' or 'r num'
+---
+>       for (i=0; i<his_num; i++){
+> 	if(fscanf(hisfile,"%d %d", &his_background, &his_count) <=0)
+> 	  break;
+> 	else{
+> 	  for (j=0; j<his_count; j++){
+> 	    fscanf(hisfile,"%s", temp);
+> 	    his[HIS_SIZE-his_num+i+1].args[j]=malloc(sizeof(temp));
+> 	    strcpy(his[HIS_SIZE-his_num+i+1].args[j],temp);
+> 	  }
+> 	  his[HIS_SIZE-his_num+i+1].background=his_background;
+> 	  his[HIS_SIZE-his_num+i+1].count=i+1;
+> 	}
+> 
+>       }
+>     }
+> 
+>     if(hisfile) fclose(hisfile);
+> 
+>     //printf("sizeof= %d", sizeof(his[0].args));
+>     
+> 
+>     while (1){            /* Program terminates normally inside setup */
+> 	background = 0;
+> 	printf("SystemsIIShell->");
+>         fflush(0);
+>         setup(inputBuffer, args, &background);       /* get next command */
+> 	if(args[0]==NULL) continue;//
+> 	// if it is 'rr' or 'r num'
+135,140c166,167
+< 	      if(his[HIS_SIZE].args[j]){
+< 		strcpy(temp,his[HIS_SIZE].args[j]);
+< 		runargs[j]=malloc(sizeof(temp));
+< 		strcpy(runargs[j],temp);
+< 		printf("%s ",runargs[j]);
+< 	      }
+---
+> 	      if(his[HIS_SIZE].args[j])
+> 		runargs[j]=his[HIS_SIZE].args[j];
+143,144d169
+< 	    printf("\n");
+< 	    
+146d170
+<           
+151,152d174
+< 	  rr_num = atoi(args[1]);
+< 	  //if(rr_num = atoi(args[1]))
+159,165c181,182
+< 		  if(his[i].args[j]){
+< 		    strcpy(temp,his[i].args[j]);
+< 		    runargs[j]=malloc(sizeof(temp));
+< 		    strcpy(runargs[j],temp);
+< 		    //		    runargs[j]=his[i].args[j];
+< 		    printf("%s ",runargs[j]);
+< 		  }
+---
+> 		  if(his[i].args[j])
+> 		    runargs[j]=his[i].args[j];
+168,169d184
+< 		printf("\n");
+< 		
+177c192
+< 	      j=0; 
+---
+> 	      j=0;
+188,195d202
+< 	    j=0; 
+< 	    while(args[j]){
+< 	      if(args[j])
+< 		runargs[j]=args[j];
+< 	      j++;
+< 	    }
+< 	    run_bg=background;
+< 	    
+210,211c217,218
+< 	  if (command_count<5)
+< 	    for (i=HIS_SIZE-command_count+1; i<HIS_SIZE+1; i++){	      
+---
+> 	  if (command_count+his_num<6)
+> 	    for (i=HIS_SIZE-command_count-his_num+1; i<HIS_SIZE+1; i++){	      
+241c248,254
+< 
+---
+> 	  j=0;
+> 	  while(args[j]){
+> 	    if(args[j])
+> 	      runargs[j]=args[j];
+> 	    j++;
+> 	  }
+> 	  run_bg=background;
+268c281
+< 	  if(command_count+i > HIS_SIZE+1){
+---
+> 	  if(command_count+i+his_num > HIS_SIZE+1){
+278d290
+< 	    his[i].background=0;
+280c292
+< 	  if(command_count+i > HIS_SIZE){
+---
+> 	  if(command_count+i+his_num > HIS_SIZE){
+297c309
+< 	if(command_count>1){
+---
+> 	if(command_count+his_num>1){
+307d318
+< 	  his[HIS_SIZE].background=0;
+312,314c323,325
+< 	while(runargs[i]){
+< 	  if(runargs[i]){
+< 	    strcpy(temp,runargs[i]);
+---
+> 	while(args[i]){
+> 	  if(args[i]){
+> 	    strcpy(temp,args[i]);
+320,321c331,332
+< 	his[HIS_SIZE].count=command_count;
+< 	his[HIS_SIZE].background=run_bg;
+---
+> 	his[HIS_SIZE].count=command_count+his_num;
+> 	his[HIS_SIZE].background=background;
+325,328c336
+< 	  if(runargs[i]){
+< 	    // free(runargs[i]);
+< 	    runargs[i]=NULL;	    
+< 	  }
+---
+> 	    runargs[i]=NULL;
+331a340,358
+> 	
+> 	hisfile = fopen("history.dat","w");
+> 	if (his_num+command_count<6) j=his_num+command_count;
+> 	else j=6;
+> 	
+> 	fprintf(hisfile,"%d\n", j);
+> 	for (i=0; i<j; i++){
+> 	  i_temp=0;
+> 	  while(his[6-j+i].args[i_temp]){
+> 	    i_temp++;
+> 	  }
+> 	  fprintf(hisfile,"%d  %d\n", his[6-j+i].background, i_temp);
+> 	  for (k=0; k<i_temp; k++){
+> 	    fprintf(hisfile,"%s\n", his[6-j+i].args[k]);
+> 	  }
+> 	}
+> 
+> 	fclose(hisfile);
+> 

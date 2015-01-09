@@ -1,0 +1,149 @@
+//Bobo Shi
+//test cases for shellA.c in Lab2
+//"gcc -g shellA.c -o shA" to compile
+//"./shA" to execute
+testcases:
+SystemsIIShell->ls
+a.out	     shA  shellA.c   shellA-old2.c  shellB.c   shell.c	  testB.txt
+history.dat  shB  shellA.c~  shellA-old.c   shellB.c~  testA.txt
+SystemsIIShell->grep bobo shellA.c
+    int i,j,rr_flag; //bobo add
+SystemsIIShell->h
+      1   ls
+      2   grep bobo shellA.c
+SystemsIIShell->pwd &
+SystemsIIShell->/home/0/shib/Lab2
+whoami
+shib
+SystemsIIShell->history
+      1   ls
+      2   grep bobo shellA.c
+      3   h
+      4   pwd &
+      5   whoami
+SystemsIIShell->r 1 /* 1st in history is ls */
+ls 
+a.out	     shA  shellA.c   shellA-old2.c  shellB.c   shell.c	  testB.txt
+history.dat  shB  shellA.c~  shellA-old.c   shellB.c~  testA.txt
+SystemsIIShell->r 5 /* 5th in history is whoami */
+whoami 
+shib
+SystemsIIShell->head shellA.c
+/* Bobo Shi */
+/*
+type 'gcc shellA.c -o shA' to compile
+type './shA' to run program.
+Test cases are in testA.txt file.
+*/
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <sys/types.h>
+SystemsIIShell->ls -lh
+total 160K
+-rwx------ 1 shib class  13K Jun 27 15:17 a.out
+-rw------- 1 shib class   60 Jun 27 15:17 history.dat
+-rwx------ 1 shib class  17K Jun 27 16:57 shA
+-rwx------ 1 shib class  18K Jun 27 12:37 shB
+-rw------- 1 shib class 7.6K Jun 27 16:56 shellA.c
+-rw------- 1 shib class 7.1K Jun 27 00:24 shellA.c~
+-rw------- 1 shib class 7.1K Jun 27 16:56 shellA-old2.c
+-rw------- 1 shib class 6.8K Jun 26 16:25 shellA-old.c
+-rw------- 1 shib class 8.3K Jun 27 00:24 shellB.c
+-rw------- 1 shib class 8.3K Jun 26 23:51 shellB.c~
+-rw------- 1 shib class 3.5K Jun 24 13:12 shell.c
+-rw------- 1 shib class 3.5K Jun 27 12:40 testA.txt
+-rw------- 1 shib class 3.3K Jun 27 12:40 testB.txt
+SystemsIIShell->echo bobo is smart
+bobo is smart
+SystemsIIShell->rr /* rr: run most recent */
+echo bobo is smart 
+bobo is smart
+SystemsIIShell->history
+      8   whoami
+      9   head shellA.c
+     10   ls -lh
+     11   echo bobo is smart
+     12   echo bobo is smart
+SystemsIIShell->r 10
+ls -lh 
+total 160K
+-rwx------ 1 shib class  13K Jun 27 15:17 a.out
+-rw------- 1 shib class   60 Jun 27 15:17 history.dat
+-rwx------ 1 shib class  17K Jun 27 16:57 shA
+-rwx------ 1 shib class  18K Jun 27 12:37 shB
+-rw------- 1 shib class 7.6K Jun 27 16:56 shellA.c
+-rw------- 1 shib class 7.1K Jun 27 00:24 shellA.c~
+-rw------- 1 shib class 7.1K Jun 27 16:56 shellA-old2.c
+-rw------- 1 shib class 6.8K Jun 26 16:25 shellA-old.c
+-rw------- 1 shib class 8.3K Jun 27 00:24 shellB.c
+-rw------- 1 shib class 8.3K Jun 26 23:51 shellB.c~
+-rw------- 1 shib class 3.5K Jun 24 13:12 shell.c
+-rw------- 1 shib class 3.5K Jun 27 12:40 testA.txt
+-rw------- 1 shib class 3.3K Jun 27 12:40 testB.txt
+SystemsIIShell->h
+     10   ls -lh
+     11   echo bobo is smart
+     12   echo bobo is smart
+     13   history
+     14   ls -lh
+SystemsIIShell->r 13 /* r 13: history. This tests history command in history */
+history 
+     11   echo bobo is smart
+     12   echo bobo is smart
+     13   history
+     14   ls -lh
+     15   h
+SystemsIIShell->ps -l 
+F S   UID   PID  PPID  C PRI  NI ADDR SZ WCHAN  TTY          TIME CMD
+0 R 33971  1028 31760  0  80   0 - 27026 -      pts/18   00:00:00 ps
+0 S 33971  4372  4371  0  80   0 - 27746 rt_sig pts/18   00:00:00 tcsh
+0 S 33971 31760  4372  0  80   0 -  1014 wait   pts/18   00:00:00 shA
+SystemsIIShell->./shA
+SystemsIIShell->ls
+a.out	     shA  shellA.c   shellA-old2.c  shellB.c   shell.c	  testB.txt
+history.dat  shB  shellA.c~  shellA-old.c   shellB.c~  testA.txt
+SystemsIIShell->badcommand /* try wrong command, should not be executed */
+*** ERROR: exec failed
+SystemsIIShell->history
+      1   ls
+      2   badcommand
+SystemsIIShell->date
+Thu Jun 27 16:59:40 EDT 2013
+/* here I press 'Ctrl+d' to go back into my first 'shA' shell */
+SystemsIIShell->SystemsIIShell->
+SystemsIIShell->h
+     14   ls -lh
+     15   h
+     16   history
+     17   ps -l
+     18   ./shA
+SystemsIIShell->which gcc
+/usr/bin/gcc
+SystemsIIShell->du -lh
+168K	.
+SystemsIIShell->h
+     17   ps -l
+     18   ./shA
+     19   h
+     20   which gcc
+     21   du -lh
+// begin to test some bad commands
+SystemsIIShell->r 2 /*test r num, num is out of history */
+the num you indicate is not in history
+*** ERROR: exec failed
+SystemsIIShell->r g /* test r num, num is not a number */
+g is not a num!
+*** ERROR: exec failed
+SystemsIIShell->r /* test r with no rum following */
+no num!
+*** ERROR: exec failed
+SystemsIIShell->history
+     21   du -lh
+     22   h
+     23   r 2
+     24   r g
+     25   r
+SystemsIIShell->echo have a good day !
+have a good day !
+//press 'Ctrl+d' to exit shA

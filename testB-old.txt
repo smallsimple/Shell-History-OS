@@ -1,0 +1,121 @@
+//Bobo Shi
+//test cases for shellB.c in Lab2
+//the history buffer is called 'history.dat'
+//when there is no 'history.dat' file in current directory, shellB.c will creat a new one
+//The format of history.dat is
+//his_num(number of commands)
+//background  i(number of args for 1st command)
+//args[0]
+//args[1]
+//....
+//background  i(number of args for 2nd command)
+//args[0]
+//....
+//background  i(number of args for his_num command)
+//args[0]
+//....
+//....
+//if 'history.dat' exists in current directory, then read it to his which contains the history of command
+//type 'gcc -g shellB.c -o shB' to compile
+//type './shB' to execute shell
+//This the first time to run. There is no 'history.dat' file which contains the history of commands
+SystemsIIShell->ls
+a.out  shA  shB  shellA.c  shellA.c~  shellA-old.c  shellB.c  shellB.c~  shell.c
+SystemsIIShell->grep bobo shellB.c
+    int i,j,k,rr_flag; //bobo add
+SystemsIIShell->who am i
+shib     pts/8        2013-06-26 21:46 (99-191-200-201.lightspeed.uparoh.sbcglobal.net)
+SystemsIIShell->h
+      1   ls
+      2   grep bobo shellB.c
+      3   who am i
+SystemsIIShell->r 1
+a.out	     shA  shellA.c   shellA-old.c  shellB.c~
+history.dat  shB  shellA.c~  shellB.c	   shell.c
+SystemsIIShell->pwd &
+/home/0/shib/Lab2
+SystemsIIShell->r 3 /* who am i*/
+shib     pts/8        2013-06-26 21:46 (99-191-200-201.lightspeed.uparoh.sbcglobal.net)
+SystemsIIShell->h
+      3   who am i
+      4   h
+      5   r 1
+      6   pwd &
+      7   r 3
+SystemsIIShell->./shB /* Start a new shB shell*/
+
+SystemsIIShell->h /* 'history' exists, new shell will read it. check the old history from previous shell, commands are the same, although the number changed. */
+      2   h
+      3   r 1
+      4   pwd &
+      5   r 3
+      6   h
+SystemsIIShell->data /* wrong command */
+*** ERROR: exec failed
+SystemsIIShell->date
+Wed Jun 26 23:57:16 EDT 2013
+SystemsIIShell->history
+      5   r 3
+      6   h
+      7   h
+      8   data
+      9   date
+SystemsIIShell->rr  
+      6   h
+      7   h
+      8   data
+      9   date
+     10   history
+SystemsIIShell->ps  
+  PID TTY          TIME CMD
+21825 pts/8    00:00:00 shB
+22819 pts/8    00:00:00 shB
+23676 pts/8    00:00:00 tcsh
+24438 pts/8    00:00:00 ps
+/* here I press 'Ctrl+d' to go back to previous shB shell */
+SystemsIIShell->SystemsIIShell
+SystemsIIShell->echo 1
+1
+SystemsIIShell->echo 2
+2
+SystemsIIShell->echo 3
+3
+SystemsIIShell->echo 4
+4
+SystemsIIShell->echo 5 
+5
+SystemsIIShell->echo 6
+6
+/* here I press 'Ctrl+d' to exit the shB shell */
+
+/* type './shB' to start shell again. 'history.dat' file exits */
+SystemsIIShell->h /* check history from previous run */
+      2   echo 2
+      3   echo 3
+      4   echo 4
+      5   echo 5
+      6   echo 6
+SystemsIIShell->r 5 /* echo 5 */
+5
+SystemsIIShell->date
+Thu Jun 27 00:11:52 EDT 2013
+SystemsIIShell->rr /* rr: date */
+Thu Jun 27 00:13:40 EDT 2013
+SystemsIIShell->ls
+a.out	     shA  shellA.c   shellA-old.c  shellB.c~
+history.dat  shB  shellA.c~  shellB.c	   shell.c
+//'Ctrl+d' to exit
+SystemsIIShell->/home/0/shib/Lab2 
+// './shB' to star again
+% ./shB
+SystemsIIShell->rr /* 'rr' also works after start a new shell*/
+a.out	     shA  shellA.c   shellA-old.c  shellB.c~
+history.dat  shB  shellA.c~  shellB.c	   shell.c
+SystemsIIShell->history
+      3   r 5
+      4   date
+      5   rr
+      6   ls
+      7   rr
+// press 'Ctrl+d' to exit
+

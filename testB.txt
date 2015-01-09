@@ -1,0 +1,146 @@
+//Bobo Shi
+//test cases for shellB.c in Lab2
+//the history buffer is called 'history.dat'
+//when there is no 'history.dat' file in current directory, shellB.c will creat a new one
+//The format of history.dat is
+//his_num(number of commands)
+//background  i(number of args for 1st command)
+//args[0]
+//args[1]
+//....
+//background  i(number of args for 2nd command)
+//args[0]
+//....
+//background  i(number of args for his_num command)
+//args[0]
+//....
+//....
+//if 'history.dat' exists in current directory, then read it to his which contains the history of command
+//type 'gcc -g shellB.c -o shB' to compile
+//type './shB' to execute shell
+//This the first time to run. There is no 'history.dat' file which contains the histotry of commands
+testcase:
+SystemsIIShell->ls
+a.out  shB	 shellA.c~	shellA-old.c  shellB.c~     shell.c    testB.txt
+shA    shellA.c  shellA-old2.c	shellB.c      shellB-old.c  testA.txt
+SystemsIIShell->grep bobo shellB.c
+    int i,j,k,rr_flag; //bobo add
+SystemsIIShell->who am i
+shib     pts/18       2013-06-27 15:51 (dhcp-128-146-2-53.osuwireless.ohio-state.edu)
+SystemsIIShell->h
+      1   ls
+      2   grep bobo shellB.c
+      3   who am i
+SystemsIIShell->r 1
+ls 
+a.out	     shA  shellA.c   shellA-old2.c  shellB.c   shellB-old.c  testA.txt
+history.dat  shB  shellA.c~  shellA-old.c   shellB.c~  shell.c	     testB.txt
+SystemsIIShell->pwd &
+/home/0/shib/Lab2
+SystemsIIShell->r 3
+who am i 
+shib     pts/18       2013-06-27 15:51 (dhcp-128-146-2-53.osuwireless.ohio-state.edu)
+SystemsIIShell->rr
+who am i 
+shib     pts/18       2013-06-27 15:51 (dhcp-128-146-2-53.osuwireless.ohio-state.edu)
+SystemsIIShell->h
+      4   h
+      5   ls
+      6   pwd &
+      7   who am i
+      8   who am i
+SystemsIIShell->./shB
+SystemsIIShell->h
+      2   ls
+      3   pwd &
+      4   who am i
+      5   who am i
+      6   h
+SystemsIIShell->date
+Thu Jun 27 17:31:27 EDT 2013
+SystemsIIShell->badcommand
+*** ERROR: exec failed
+SystemsIIShell->history
+      5   who am i
+      6   h
+      7   h
+      8   date
+      9   badcommand
+SystemsIIShell->rr
+history 
+      6   h
+      7   h
+      8   date
+      9   badcommand
+     10   history
+SystemsIIShell->ps
+  PID TTY          TIME CMD
+ 4372 pts/18   00:00:00 tcsh
+27939 pts/18   00:00:00 shB
+28856 pts/18   00:00:00 shB
+28866 pts/18   00:00:00 ps
+SystemsIIShell->SystemsIIShell->
+SystemsIIShell->echo 1
+1
+SystemsIIShell->echo 2
+2
+SystemsIIShell->echo 3
+3
+SystemsIIShell->echo 4
+4
+SystemsIIShell->echo 5
+5
+SystemsIIShell->echo 6
+6
+/* here I press 'Ctrl+d' to exit the shB shell */
+
+//type './shB' to start shB shell again. 'history.dat' file exits 
+SystemsIIShell->h
+      2   echo 2
+      3   echo 3
+      4   echo 4
+      5   echo 5
+      6   echo 6
+SystemsIIShell->r 5
+echo 5 
+5
+SystemsIIShell->date
+Thu Jun 27 17:33:23 EDT 2013
+SystemsIIShell->rr
+date 
+Thu Jun 27 17:33:28 EDT 2013
+SystemsIIShell->ls
+a.out	     shA  shellA.c   shellA-old2.c  shellB.c   shellB-old.c  testA.txt
+// 'Ctrl+d' to exit
+SystemsIIShell->/home/0/shib/Lab2        
+// './shB' to start shell again
+ % ./shB
+SystemsIIShell->rr
+ls 
+a.out	     shA  shellA.c   shellA-old2.c  shellB.c   shellB-old.c  testA.txt
+history.dat  shB  shellA.c~  shellA-old.c   shellB.c~  shell.c	     testB.txt
+SystemsIIShell->history
+      3   echo 5
+      4   date
+      5   date
+      6   ls
+      7   ls
+//'Ctrl+d' to exit
+// begin to test some bad commands
+// './shB' to begin shell
+SystemsIIShell->h
+      2   date
+      3   date
+      4   ls
+      5   ls
+      6   history
+SystemsIIShell->r 1 /* test r num, where num is out of history */
+the num you indicate is not in history
+*** ERROR: exec failed
+SystemsIIShell->r notnum /* test r num, where 'num' is not a num */
+notnum is not a num!
+*** ERROR: exec failed
+SystemsIIShell->r /* test r without a num following */
+no num!
+*** ERROR: exec failed
+// 'Ctrl+d' to exit
